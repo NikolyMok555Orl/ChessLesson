@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    class Rook : Figure
+
+    public class Rook : Figure
     {
         public Rook(bool isBlack, Point cord) : base("Rook", isBlack, cord)
         {
@@ -23,38 +24,97 @@ namespace Chess
 
         public override bool CanMove(Point newCord, Board board)
         {
-            int xyMin = 0;
-            int xyMax = 0;
-            bool isX = true;
+            if (!((cord.X == newCord.X) || (cord.Y == newCord.Y))) return false;
 
-            if (cord.X != newCord.X) {
-                xyMin = cord.X + 1;
-                xyMax = newCord.X - 1;
+
+            //проверка хода по вертикали или горизантали
+            int minI, maxI;
+            Point direction = new Point(0, 0);
+            if (cord.X != newCord.X)
+            {
+                minI = Math.Min(cord.X, newCord.X);
+                maxI = Math.Max(cord.X, newCord.X);
+                direction.X = Math.Sign(newCord.X - cord.X);
             }
             else
             {
-                isX = false;
-                xyMin = cord.Y + 1;
-                xyMax = newCord.Y - 1;
+                minI = Math.Min(cord.Y, newCord.Y);
+                maxI = Math.Max(cord.Y, newCord.Y);
+                direction.Y = Math.Sign(newCord.Y - cord.Y);
             }
 
-
-            for (int i = xyMin; i < xyMax; i++)
+            for (int i = 1; i < maxI - minI - 1; i++)
             {
-                if (isX)
-                {
-                    if (board[i, cord.Y] !=null) return false;
-                }
-                else
-                {
-                    if (board[cord.X, i] != null) return false;
-                }
+                if (board[cord.X + i * direction.X, cord.Y + i * direction.Y] != null)
+                    return false;
             }
+
+            if (board[newCord.X, newCord.Y] == null || board[newCord.X, newCord.Y].IsBlack != this.isBlack) return true;
+            else return false;
+            /*int xyMin = 0;
+            int xyMax = 0;
+            bool isX = true;
+
+            if (!((cord.X == newCord.X) || (cord.Y == newCord.Y))) return false;
+
+            //проверка хода по вертикали или горизантали
+            if (cord.X != newCord.X ) {
+                xyMin = Math.Min(cord.X<newCord.X?cord.X+1:cord.X-1 , newCord.X);
+                xyMax = Math.Max(cord.X < newCord.X ? cord.X + 1 : cord.X - 1, newCord.X);
+            }
+            else if (cord.Y != newCord.Y)
+            {
+                isX = false;
+                xyMin = Math.Min(cord.Y < newCord.Y ? cord.Y + 1 : cord.Y - 1, newCord.Y);
+                xyMax = Math.Max(cord.Y < newCord.Y ? cord.Y + 1 : cord.Y - 1, newCord.Y);
+            }
+            else
+            {
+                return false;
+            }
+
+
+
+            for (int i = xyMin; (i < xyMax) && (i<8); i++)
+                {
+                    if (isX)
+                    {
+                        if (board[i, cord.Y] != null) return false;
+                    }
+                    else
+                    {
+                        if (board[cord.X, i] != null) return false;
+                    }
+                }
+           
+
+            if (isX)
+            {
+                if (board[newCord.X, cord.Y] == null || board[newCord.X, cord.Y].IsBlack != this.isBlack) return true;
+                else return false;
+            }
+            else
+            {
+                if (board[cord.X, newCord.Y] == null || board[cord.X, newCord.Y].IsBlack != this.isBlack) return true;
+                else return false;
+            }*/
         }
 
-        public override bool Move(Point point, Board board)
+        public override bool CanMove(int x, int y, Board board)
         {
-            throw new NotImplementedException();
+            return CanMove(new Point(x, y), board);
         }
+
+        public override object Clone()
+        {
+            return new Rook(isBlack, cord);
+        }
+
+        /* public override bool Move(Point newCord, Board board)
+         {
+
+         }*/
     }
+
+
 }

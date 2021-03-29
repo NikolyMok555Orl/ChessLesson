@@ -46,22 +46,31 @@ namespace Chess
             return false;
         }
 
-        public override bool Move(Point newCord, Board board)
+        public override bool CanMove(int x, int y, Board board)
         {
-            if(CanMove(newCord, board))
-            {
-                wasMove = true;
-                
-                //Тут x, y = i, j
-                board[newCord.X, newCord.Y] = this;
-                board[cord] = null;
-                cord = newCord;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return CanMove(new Point(x, y), board);
         }
+        public override object Clone()
+        {
+            return new Pawn(isBlack, cord);
+        }
+
+        /* public override bool Move(Point newCord, Board board)
+         {
+             if(CanMove(newCord, board))
+             {
+                 wasMove = true;
+
+                 //Тут x, y = i, j
+                 board[newCord.X, newCord.Y] = this;
+                 board[cord] = null;
+                 cord = newCord;
+                 return true;
+             }
+             else
+             {
+                 return false;
+             }
+         }*/
     }
 }

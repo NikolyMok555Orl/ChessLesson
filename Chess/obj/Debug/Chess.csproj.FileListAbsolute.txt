@@ -7,3 +7,4 @@ D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.csproj.GenerateResource.ca
 D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.csproj.CoreCompileInputs.cache
 D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.exe
 D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.pdb
+D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.FormChess.resources

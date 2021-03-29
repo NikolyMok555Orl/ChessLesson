@@ -10,11 +10,23 @@ using System.Windows.Forms;
 
 namespace Chess
 {
-    public partial class Form1 : Form
+    public partial class FormChess : Form
     {
-        public Form1()
+        public FormChess()
         {
             InitializeComponent();
+        }
+        ClassInterfaceChess classInterface;
+
+        private void btbStart_Click(object sender, EventArgs e)
+        {
+            tableLayoutPanelChess.Controls.Clear();
+            classInterface = new ClassInterfaceChess(tableLayoutPanelChess);
+        }
+
+        private void FormChess_Load(object sender, EventArgs e)
+        {
+            classInterface = new ClassInterfaceChess(tableLayoutPanelChess);
         }
     }
 }
