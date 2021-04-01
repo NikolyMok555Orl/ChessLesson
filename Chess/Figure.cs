@@ -13,11 +13,18 @@ namespace Chess
         protected bool isBlack;
         protected Point cord;
         protected bool wasMove;
+        protected const int CostFigure=0;
 
         public bool IsBlack { get => isBlack; }
         public string Name { get => name; }
         public Point Cord { get => cord; }
         public bool WasMove { get => wasMove;  }
+
+        public int Sign { get
+            {
+                return isBlack ? -1 : 1;
+            }
+        }
 
         protected Figure(string name, bool isBlack, Point cord)
         {
@@ -56,11 +63,12 @@ namespace Chess
                 }
 
 
-                wasMove = true;
+               /* wasMove = true;
                 //Тут x, y = i, j
                 board[newCord.X, newCord.Y] = this;
                 board[cord] = null;
-                cord = newCord;
+                cord = newCord;*/
+                board[cord.X, cord.Y].MoveWithoutCheck(newCord, board);
                 board.Check();
                 return true;
             }
@@ -90,6 +98,12 @@ namespace Chess
         }
 
         public abstract object Clone();
+        /// <summary>
+        /// Создаёт лист с кординатами куда можно ходить
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
+        public abstract List<Point> ListCanMove(Board board);
         
     }
 }

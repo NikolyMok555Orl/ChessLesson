@@ -12,8 +12,8 @@ namespace Chess
         Figure[,] board = new Figure[8, 8];
         bool isBlack = false;
         GameStates gameState;
-        public bool IsBlack { get => isBlack;  }
-        public GameStates GameState { get => gameState;  }
+        public bool IsBlack { get => isBlack; }
+        public GameStates GameState { get => gameState; }
 
         public enum GameStates
         {
@@ -40,7 +40,7 @@ namespace Chess
                     this[i, 0] = new Horse(false, new Point(i, 0));
                     this[i, 7] = new Horse(true, new Point(i, 7));
                 }
-                if (i == 2 || i==5)
+                if (i == 2 || i == 5)
                 {
                     this[i, 0] = new Bishop(false, new Point(i, 0));
                     this[i, 7] = new Bishop(true, new Point(i, 7));
@@ -64,7 +64,7 @@ namespace Chess
         {
             get
             {
-                if (x > -1 && y > -1 && x < 8 && y < 8)
+                if (CordIsCorrect(x, y))
                 {
                     return board[y, x];
                 }
@@ -74,11 +74,12 @@ namespace Chess
                 }
             }
 
-            set{
+            set
+            {
 
-                if (x > -1 && y > -1 && x < 8 && y < 8)
+                if (CordIsCorrect(x, y))
                 {
-                     board[y, x]=value;
+                    board[y, x] = value;
                 }
                 else
                 {
@@ -91,9 +92,9 @@ namespace Chess
         {
             get
             {
-                if (point.X > -1 && point.Y > -1 && point.X < 8 && point.Y < 8)
+                if (CordIsCorrect(point))
                 {
-                    return board[ point.Y, point.X];
+                    return board[point.Y, point.X];
                 }
                 else
                 {
@@ -104,7 +105,7 @@ namespace Chess
             set
             {
 
-                if (point.X > -1 && point.Y > -1 && point.X < 8 && point.Y < 8)
+                if (CordIsCorrect(point))
                 {
                     board[point.Y, point.X] = value;
                 }
@@ -115,13 +116,14 @@ namespace Chess
             }
         }
 
-        public  string ToStringLine(int y)
+        public string ToStringLine(int y)
         {
             string iLine = "";
             for (int x = 0; x < board.GetUpperBound(1) + 1; x++)
             {
-                if(this[x, y]!= null){
-                    iLine += this[x, y].ShortName+ (this[x, y].IsBlack?"b":"w");
+                if (this[x, y] != null)
+                {
+                    iLine += this[x, y].ShortName + (this[x, y].IsBlack ? "b" : "w");
                 }
                 else
                 {
@@ -136,7 +138,7 @@ namespace Chess
             string boardLine = "";
             for (int y = 0; y < board.GetUpperBound(0) + 1; y++)
             {
-                boardLine +=y+":"+ ToStringLine(y)+";";
+                boardLine += y + ":" + ToStringLine(y) + ";";
             }
             return boardLine;
         }
@@ -151,9 +153,10 @@ namespace Chess
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    if (this[i, j] != null) {
+                    if (this[i, j] != null)
+                    {
                         boardNew[i, j] = (Figure)this[i, j].Clone();
-                            }
+                    }
 
                 }
             }
@@ -180,7 +183,8 @@ namespace Chess
 
         public bool Move(Point fromCell, Point toCell)
         {
-            if (CheckCoordinatesNotNull(fromCell) && this[fromCell].IsBlack==IsBlack) {
+            if (CheckCoordinatesNotNull(fromCell) && this[fromCell].IsBlack == IsBlack)
+            {
                 if (this[fromCell].Move(toCell, this))
                 {
                     isBlack = isBlack ? false : true;
@@ -196,12 +200,14 @@ namespace Chess
         {
             King kingWhite = FindKing(false);
             King kingBlack = FindKing(true);
-            if (CanBeDamager(kingWhite.Cord, kingWhite.IsBlack)) {
+            if (CanBeDamager(kingWhite.Cord, kingWhite.IsBlack))
+            {
                 gameState = GameStates.check;
                 return true;
 
             }
-            if (CanBeDamager(kingBlack.Cord, kingBlack.IsBlack)) {
+            if (CanBeDamager(kingBlack.Cord, kingBlack.IsBlack))
+            {
                 gameState = GameStates.check;
                 return true;
             }
@@ -215,10 +221,12 @@ namespace Chess
         /// <returns></returns>
         public bool Check(bool isBlack)
         {
-            King king=FindKing(isBlack);
-            if (CanBeDamager(king.Cord, king.IsBlack)) {
+            King king = FindKing(isBlack);
+            if (CanBeDamager(king.Cord, king.IsBlack))
+            {
                 gameState = GameStates.check;
-                return true; }
+                return true;
+            }
             return false;
         }
 
@@ -237,11 +245,11 @@ namespace Chess
         }
 
 
-        private  bool CheckCoordinatesNotNull(Point point)
+        private bool CheckCoordinatesNotNull(Point point)
         {
             if (point.X >= 0 && point.Y >= 0 && point.X < 8 && point.Y < 8 && this[point] != null) return true;
             else return false;
-               
+
         }
 
 
@@ -253,13 +261,55 @@ namespace Chess
                 {
                     if (this[i, j] != null)
                     {
-                        if (this[i, j] is King && this[i, j].IsBlack== isBlack)
+                        if (this[i, j] is King && this[i, j].IsBlack == isBlack)
                             return this[i, j] as King;
                     }
                 }
             }
-            throw new Exception("На доске не короля "+(isBlack?"черного":"белого"));
+            throw new Exception("На доске не короля " + (isBlack ? "черного" : "белого"));
         }
 
+
+        public List<Point> ListFiguresCanMove()
+        {
+            List<Point> listFigures = new List<Point>();
+
+
+            int rows = this.board.GetUpperBound(0) + 1;
+            int columns = this.board.GetUpperBound(1) + 1;
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (this[i, j] != null && this[i, j].IsBlack == isBlack)
+                    {
+                        List<Point> listCanMove = this[i, j].ListCanMove(this);
+                        if (!(listCanMove is null) && listCanMove.Count > 0) listFigures.Add(new Point(i, j));
+
+                    }
+                }
+            }
+
+            return listFigures;
+
+        }
+        /// <summary>
+        /// Проверяет на коректность кординат
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static bool CordIsCorrect(Point point)
+        {
+            if (point.X > -1 && point.Y > -1 && point.X < 8 && point.Y < 8) return true;
+            return false;
+        }
+
+
+        public static bool CordIsCorrect(int x, int y)
+        {
+            if (CordIsCorrect(new Point(x, y))) return true;
+            return false;
+        }
     }
 }

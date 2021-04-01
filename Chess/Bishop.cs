@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
+    /// <summary>
+    /// Слон
+    /// </summary>
     public class Bishop : Figure
     {
+        new const int CostFigure = 3;
         public Bishop(bool isBlack, Point cord) : base("Bishop ", isBlack, cord)
         {
         }
@@ -17,6 +21,7 @@ namespace Chess
 
         public override bool CanMove(Point newCord, Board board)
         {
+            if (!Board.CordIsCorrect(newCord)) return false;
             if (Math.Abs(cord.X-newCord.X) ==Math.Abs(cord.Y - newCord.Y))
             {
                 int dirX = Math.Sign(newCord.X - cord.X);
@@ -40,6 +45,21 @@ namespace Chess
         public override object Clone()
         {
             return new Bishop(isBlack, cord); 
+        }
+
+        public override List<Point> ListCanMove(Board board)
+        {
+            List<Point> pointsCanMove = new List<Point>();
+            for (int i = 1; i < 8; i++)
+            {
+                if (cord.X + i<8 && cord.Y + i<8 && CanMove(new Point(cord.X + i, cord.Y + i), board)) pointsCanMove.Add(new Point(cord.X + i, cord.Y + i));
+                if (cord.X - i > -1 && cord.Y - i > -1 && CanMove(new Point(cord.X - i, cord.Y - i), board)) pointsCanMove.Add(new Point(cord.X - i, cord.Y - i));
+                if (cord.X + i < 8 && cord.Y - i > -1 && CanMove(new Point(cord.X + i, cord.Y - i), board)) pointsCanMove.Add(new Point(cord.X + i, cord.Y - i));
+                if (cord.X - i > -1 && cord.Y + i < 8 && CanMove(new Point(cord.X - i, cord.Y + i), board)) pointsCanMove.Add(new Point(cord.X - i, cord.Y + i));
+            }
+
+
+            return pointsCanMove;
         }
     }
 }

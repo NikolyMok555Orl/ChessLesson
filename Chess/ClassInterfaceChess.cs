@@ -16,6 +16,7 @@ namespace Chess
         TableLayoutPanel tableChess;
         Color whiteCell = Color.LemonChiffon;
         Color blackCell = Color.Chocolate;
+        Color colorBorder;
         bool wasClick = false;
 
 
@@ -72,6 +73,12 @@ namespace Chess
                 firstCellClick = newCord;
                 firstButtonCellClick = button;
                 button.BackColor= button.FlatAppearance.MouseDownBackColor;
+                if (button.Text.Length>0) {
+                    ShowCanMoveFigures(board.ListFiguresCanMove());
+                    ShowCanMove(board[newCord].ListCanMove(board));
+                }
+
+
             }
             else
             {
@@ -81,8 +88,9 @@ namespace Chess
                     if (board.Move(firstCellClick, newCord)) Redrawing();
                     if (board.GameState == Board.GameStates.check) MessageBox.Show("Шах");
                     MessageBox.Show((!board.IsBlack?"Ход белых":"Ход черных")+" "+ newCord.ToString());
+                    //Form1.labalTurn
                     //if (board.GameState == Board.GameStates.check) MessageBox.Show("Шах");
-                   
+
 
                 }
 
@@ -90,7 +98,7 @@ namespace Chess
                 if (firstButtonCellClick.FlatAppearance.MouseDownBackColor == Color.Goldenrod) firstButtonCellClick.BackColor = whiteCell;
                 else firstButtonCellClick.BackColor = blackCell;
                 firstButtonCellClick = null;
-
+                ReturntShowCanMove();
 
             }
 
@@ -110,6 +118,56 @@ namespace Chess
             }
         }
 
+
+        private void ShowCanMove(List<Point> pointsMoveCan)
+        {
+            foreach (var but in tableChess.Controls)
+            {
+                Button button = (Button)(but);
+                Point newCord = (Point)button.Tag;
+                if (pointsMoveCan is null) return;
+                foreach (var pointMoveCan in pointsMoveCan)
+                {
+                    if (newCord.Equals(pointMoveCan))
+                    {
+                        
+                            colorBorder = button.FlatAppearance.BorderColor;
+                            button.FlatAppearance.BorderColor = Color.Blue;
+                            
+                       
+                    }
+                }
+
+            }   
+        }
+
+        private void ShowCanMoveFigures(List<Point> figuresMoveCan)
+        {
+            foreach (var but in tableChess.Controls)
+            {
+                Button button = (Button)(but);
+                Point newCord = (Point)button.Tag;
+                foreach (var pointMoveCan in figuresMoveCan)
+                {
+                    if (newCord.Equals(pointMoveCan))
+                    {
+                        colorBorder = button.FlatAppearance.BorderColor;
+                        button.FlatAppearance.BorderColor = Color.Aqua;
+                    }
+                }
+
+            }
+        }
+
+
+        private void ReturntShowCanMove()
+        {
+            foreach (var but in tableChess.Controls)
+            {
+                Button button = (Button)(but);
+                button.FlatAppearance.BorderColor = colorBorder;
+            }
+        }
 
     }
 }

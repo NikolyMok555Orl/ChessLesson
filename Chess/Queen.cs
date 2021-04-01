@@ -9,6 +9,7 @@ namespace Chess
 {
     public class Queen : Bishop
     {
+        new const int CostFigure = 9;
         public Queen(bool isBlack, Point cord) : base(isBlack, cord)
         {
             this.name = "Queen";
@@ -18,6 +19,7 @@ namespace Chess
 
         public override bool CanMove(Point newCord, Board board)
         {
+            if (!Board.CordIsCorrect(newCord)) return false;
             if (base.CanMove(newCord, board))
                 return true;
             else
@@ -43,7 +45,7 @@ namespace Chess
                     direction.Y = Math.Sign(newCord.Y - cord.Y);
                 }
 
-                for(int i = 1; i < maxI - minI-1; i++)
+                for(int i = 1; i <= maxI - minI-1; i++)
                 {
                     if (board[cord.X+i*direction.X, cord.Y + i * direction.Y] != null)
                         return false;
@@ -54,45 +56,7 @@ namespace Chess
 
 
 
-                /* if (cord.X != newCord.X)
-                 {
-                     xyMin = Math.Min(cord.X < newCord.X ? cord.X + 1 : cord.X - 1, newCord.X);
-                     xyMax = Math.Max(cord.X < newCord.X ? cord.X + 1 : cord.X - 1, newCord.X);
-                 }
-                 else if(cord.Y!=newCord.Y)
-                 {
-                     isX = false;
-                     xyMin = Math.Min(cord.Y < newCord.Y ? cord.Y + 1 : cord.Y - 1, newCord.Y);
-                     xyMax = Math.Max(cord.Y < newCord.Y ? cord.Y + 1 : cord.Y - 1, newCord.Y);
-                 }
-                 else
-                 {
-                     return false;
-                 }
-
-
-
-                 for (int i = xyMin; i < xyMax && i < 8; i++)
-                 {
-                     if (isX)
-                     {
-                         if (board[i, cord.Y] != null) return false;
-                     }
-                     else
-                     {
-                         if (board[cord.X, i] != null) return false;
-                     }
-                 }
-                 if (isX)
-                 {
-                     if (board[newCord.X, cord.Y] == null || board[newCord.X, cord.Y].IsBlack != this.isBlack) return true;
-                     else return false;
-                 }
-                 else
-                 {
-                     if (board[cord.X, newCord.Y] == null || board[cord.X, newCord.Y].IsBlack != this.isBlack) return true;
-                     else return false;
-                 }*/
+                
             }
 
         }
@@ -112,11 +76,32 @@ namespace Chess
             return new Queen(isBlack, cord);
         }
 
-       /* public override void MoveWithoutCheck(Point newPosition, Board board)
+        public override List<Point> ListCanMove(Board board)
         {
-            base.MoveWithoutCheck(newPosition, board);
-        }*/
+            List<Point> pointsCanMove = new List<Point>();
+            for (int i = 1; i < 8; i++)
+            {
+                //по диагонали
+                if (cord.X + i < 8 && cord.Y + i < 8 && CanMove(new Point(cord.X + i, cord.Y + i), board)) pointsCanMove.Add(new Point(cord.X + i, cord.Y + i));
+                if (cord.X - i > -1 && cord.Y - i > -1 && CanMove(new Point(cord.X - i, cord.Y - i), board)) pointsCanMove.Add(new Point(cord.X - i, cord.Y - i));
+                if (cord.X + i < 8 && cord.Y - i > -1 && CanMove(new Point(cord.X + i, cord.Y - i), board)) pointsCanMove.Add(new Point(cord.X + i, cord.Y - i));
+                if (cord.X - i > -1 && cord.Y + i < 8 && CanMove(new Point(cord.X - i, cord.Y + i), board)) pointsCanMove.Add(new Point(cord.X - i, cord.Y + i));
+                //по горизонтали и вертикали
+                if (cord.X - i > -1  && CanMove(new Point(cord.X - i, cord.Y), board)) pointsCanMove.Add(new Point(cord.X - i, cord.Y));
+                if (cord.X + i <8  && CanMove(new Point(cord.X + i, cord.Y ), board)) pointsCanMove.Add(new Point(cord.X + i, cord.Y));
+                if (cord.Y - i >-1 && CanMove(new Point(cord.X, cord.Y - i), board)) pointsCanMove.Add(new Point(cord.X, cord.Y - i));
+                if (cord.Y + i < 8 && CanMove(new Point(cord.X, cord.Y + i), board)) pointsCanMove.Add(new Point(cord.X, cord.Y + i));
+            }
 
-        
+            return pointsCanMove;
+
+        }
+
+        /* public override void MoveWithoutCheck(Point newPosition, Board board)
+         {
+             base.MoveWithoutCheck(newPosition, board);
+         }*/
+
+
     }
 }
