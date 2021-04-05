@@ -10,7 +10,7 @@ namespace Chess
 {
     class ClassInterfaceChess
     {
-        Board board;
+        Board boardGame;
         Point firstCellClick;
         Button firstButtonCellClick;
         TableLayoutPanel tableChess;
@@ -22,7 +22,7 @@ namespace Chess
 
         public ClassInterfaceChess(TableLayoutPanel tableChess)
         {
-            board = new Board();
+            boardGame = new Board();
             this.tableChess = tableChess;
             for (int i = 0; i < 8; i++)
             {
@@ -44,7 +44,7 @@ namespace Chess
                     //button.Size = new System.Drawing.Size(tableChess.RowStyles., 56);
                     button.UseVisualStyleBackColor = false;
                     button.Click += new System.EventHandler(this.button_Click);
-                    if (board[i,7-j] != null) button.Text = board[i, 7-j].ToString();
+                    if (boardGame[i,7-j] != null) button.Text = boardGame[i, 7-j].ToString();
                     button.Tag = new Point( i,  7-j);
                     
 
@@ -62,7 +62,11 @@ namespace Chess
 
            
         }
-
+        /// <summary>
+        /// Нажитие на кнопку. Ход
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_Click(object sender, EventArgs e)
         {
             Button button = (Button)(sender);
@@ -74,8 +78,8 @@ namespace Chess
                 firstButtonCellClick = button;
                 button.BackColor= button.FlatAppearance.MouseDownBackColor;
                 if (button.Text.Length>0) {
-                    ShowCanMoveFigures(board.ListFiguresCanMove());
-                    ShowCanMove(board[newCord].ListCanMove(board));
+                    ShowCanMoveFigures(boardGame.ListFiguresCanMove());
+                    ShowCanMove(boardGame[newCord].ListCanMove(boardGame));
                 }
 
 
@@ -85,11 +89,19 @@ namespace Chess
                 if (newCord != firstCellClick)
                 {
 
-                    if (board.Move(firstCellClick, newCord)) Redrawing();
-                    if (board.GameState == Board.GameStates.check) MessageBox.Show("Шах");
-                    MessageBox.Show((!board.IsBlack?"Ход белых":"Ход черных")+" "+ newCord.ToString());
+                    if (boardGame.Move(firstCellClick, newCord)) Redrawing();
+                    if (boardGame.GameState == Board.GameStates.check) MessageBox.Show("Шах");
+                    MessageBox.Show((!boardGame.IsBlack?"Ход белых":"Ход черных")+" "+ newCord.ToString());
                     //Form1.labalTurn
                     //if (board.GameState == Board.GameStates.check) MessageBox.Show("Шах");
+                    if (boardGame.CheckMate())
+                    {
+                        MessageBox.Show("Шах и Мат");
+                    }
+                    else if (boardGame.Check(!boardGame.IsWhiteTurn))
+                    {
+                        MessageBox.Show("Шах");
+                    }
 
 
                 }
@@ -98,6 +110,7 @@ namespace Chess
                 if (firstButtonCellClick.FlatAppearance.MouseDownBackColor == Color.Goldenrod) firstButtonCellClick.BackColor = whiteCell;
                 else firstButtonCellClick.BackColor = blackCell;
                 firstButtonCellClick = null;
+
                 ReturntShowCanMove();
 
             }
@@ -112,13 +125,16 @@ namespace Chess
                 {
                     Button button = (Button)(item);
                     Point cord = (Point)button.Tag;
-                    if (board[cord] is null) button.Text = "";
-                    else button.Text = board[cord].ToString();
+                    if (boardGame[cord] is null) button.Text = "";
+                    else button.Text = boardGame[cord].ToString();
                 }
             }
         }
 
-
+        /// <summary>
+        /// Обозначение клеток где фигура может ходить
+        /// </summary>
+        /// <param name="pointsMoveCan"></param>
         private void ShowCanMove(List<Point> pointsMoveCan)
         {
             foreach (var but in tableChess.Controls)
@@ -130,11 +146,9 @@ namespace Chess
                 {
                     if (newCord.Equals(pointMoveCan))
                     {
-                        
                             colorBorder = button.FlatAppearance.BorderColor;
                             button.FlatAppearance.BorderColor = Color.Blue;
-                            
-                       
+                            button.FlatAppearance.BorderSize = 2;
                     }
                 }
 
@@ -153,19 +167,23 @@ namespace Chess
                     {
                         colorBorder = button.FlatAppearance.BorderColor;
                         button.FlatAppearance.BorderColor = Color.Aqua;
+                        button.FlatAppearance.BorderSize = 2;
                     }
                 }
 
             }
         }
 
-
+        /// <summary>
+        /// Возраврат границ к стандартному виду.
+        /// </summary>
         private void ReturntShowCanMove()
         {
             foreach (var but in tableChess.Controls)
             {
                 Button button = (Button)(but);
                 button.FlatAppearance.BorderColor = colorBorder;
+                button.FlatAppearance.BorderSize = 1;
             }
         }
 

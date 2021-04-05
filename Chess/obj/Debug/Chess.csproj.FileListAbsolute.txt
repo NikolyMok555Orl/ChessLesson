@@ -8,3 +8,13 @@ D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.csproj.CoreCompileInputs.c
 D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.exe
 D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.pdb
 D:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.FormChess.resources
+H:\yniver\OOT\proga\ChessLesson\Chess\bin\Debug\Chess.exe.config
+H:\yniver\OOT\proga\ChessLesson\Chess\bin\Debug\Chess.exe
+H:\yniver\OOT\proga\ChessLesson\Chess\bin\Debug\Chess.pdb
+H:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.csprojAssemblyReference.cache
+H:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.FormChess.resources
+H:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.Properties.Resources.resources
+H:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.csproj.GenerateResource.cache
+H:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.csproj.CoreCompileInputs.cache
+H:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.exe
+H:\yniver\OOT\proga\ChessLesson\Chess\obj\Debug\Chess.pdb

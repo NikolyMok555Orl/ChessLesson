@@ -14,10 +14,21 @@ namespace Chess
         GameStates gameState;
         public bool IsBlack { get => isBlack; }
         public GameStates GameState { get => gameState; }
+        private bool isWhiteTurn = true;
+        private bool isEndOfGame = false;
 
         public enum GameStates
         {
             gaming, winWhite, winBlack, stalemate, check
+        }
+
+
+        public bool IsWhiteTurn
+        {
+            get
+            {
+                return isWhiteTurn;
+            }
         }
 
         public Board()
@@ -230,7 +241,7 @@ namespace Chess
             return false;
         }
 
-
+        /*
         public GameStates Mate()
         {
             if (!Check()) return GameStates.gaming;
@@ -242,6 +253,47 @@ namespace Chess
 
             }
             return GameStates.gaming;
+        }*/
+
+
+        //Андрея
+        private bool Mate(Point king)
+        {
+            for (int i = king.X - 1; i <= king.X + 1; i++)
+                for (int j = king.Y - 1; j <= king.Y + 1; j++)
+                {
+
+                    if (CordIsCorrect(i, j))
+                    {
+                        if ((this[king.X, king.Y].CanMove(new Point(i, j), this)) || ((king.X == i) && (king.Y == j)))
+                            if (!CanBeDamager(new Point(i, j), !this[king.X, king.Y].IsBlack))
+                                return false;
+                    }
+                }
+            return true;
+        }
+        //Андрея
+        public bool CheckMate()
+        {
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    if (this[i, j] != null)
+                        if (this[i, j].IsBlack != isWhiteTurn)
+                            if (this[i, j] is King)
+                            {
+
+                                if (Mate(new Point(i, j)))
+                                {
+                                    isEndOfGame = true;
+                                    if (isWhiteTurn)
+                                        gameState = GameStates.winBlack;
+                                    else gameState = GameStates.winWhite;
+                                    return true;
+                                }
+                            }
+                }
+            return false;
         }
 
 
